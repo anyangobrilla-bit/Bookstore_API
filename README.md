@@ -127,6 +127,25 @@ The test suite covers:
 
 **Test results: 4 tests passed.**
 
+## 7. API Testing
+
+The API was tested using Swagger Editor and automated tests with pytest.
+
+To execute the automated test suite, run:
+
+```bash
+python -m pytest -v
+```
+
+The test suite covers:
+
+1. Successful retrieval of book information.
+2. Unauthorized access rejection.
+3. Successful customer order creation.
+4. Successful delivery record creation.
+
+**Test results: 4 tests passed.**
+
 All three API endpoints were also tested successfully using Swagger Editor.
 
 ## 8. API Documentation
