@@ -6,9 +6,9 @@ The Bookstore Management System API is a RESTful web service developed using Pyt
 
 The project integrates three mock services:
 
-- Inventory Service: Manages book information, prices and stock levels.
-- Sales Service: Processes customer orders, validates stock availability and simulates payments.
-- Delivery Service: Creates delivery records and manages courier and shipping information.
+- **Inventory Service:** Manages book information, prices and stock levels.
+- **Sales Service:** Processes customer orders, validates stock availability and simulates payments.
+- **Delivery Service:** Creates delivery records and manages courier and shipping information.
 
 The API uses JSON for data exchange and API key authentication to protect its endpoints.
 
@@ -135,7 +135,7 @@ The API is documented using OpenAPI 3.0 in the `openapi.yaml` file.
 
 The documentation can be viewed and used for interactive testing through:
 
-https://editor.swagger.io/
+[Swagger Editor](https://editor.swagger.io/)
 
 Import the `openapi.yaml` file into Swagger Editor to explore the available endpoints, request formats and response codes.
 
