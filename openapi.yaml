@@ -1,0 +1,174 @@
+openapi: 3.0.3
+
+info:
+  title: Bookstore Management System API
+  description: RESTful API for integrating Inventory, Sales, and Delivery services.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:5000
+    description: Local development server
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+          example: "978-0132350884"
+        title:
+          type: string
+          example: Clean Code
+        author:
+          type: string
+          example: Robert C. Martin
+        price:
+          type: number
+          example: 2500.00
+        currency:
+          type: string
+          example: KES
+        stock_level:
+          type: integer
+          example: 42
+
+    Order:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          example: CUST001
+        isbn:
+          type: string
+          example: "978-0132350884"
+        quantity:
+          type: integer
+          example: 2
+        payment_method:
+          type: string
+          example: M-Pesa
+
+    OrderResponse:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        isbn:
+          type: string
+        quantity:
+          type: integer
+        payment_method:
+          type: string
+        status:
+          type: string
+          example: PAID
+        total_amount:
+          type: number
+          example: 5000.00
+        currency:
+          type: string
+          example: KES
+        timestamp:
+          type: string
+          format: date-time
+
+    Delivery:
+      type: object
+      required:
+        - shipping_address
+        - courier_service
+        - estimated_delivery_date
+      properties:
+        shipping_address:
+          type: string
+          example: Nairobi, Kenya
+        courier_service:
+          type: string
+          example: G4S
+        estimated_delivery_date:
+          type: string
+          example: "2026-11-03"
+
+paths:
+  /api/v1/books/{isbn}:
+    get:
+      summary: Retrieve book details
+      description: Retrieves book information from the Inventory Service.
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "9780132350884"
+      responses:
+        "200":
+          description: Book retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        "401":
+          description: Missing or invalid API key
+        "404":
+          description: Book not found
+
+  /api/v1/orders:
+    post:
+      summary: Place a customer order
+      description: Checks inventory, reduces stock, and creates an order with simulated payment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+        "400":
+          description: Invalid order or insufficient stock
+        "401":
+          description: Missing or invalid API key
+
+  /api/v1/deliveries/{order_id}:
+    put:
+      summary: Create a delivery record
+      description: Creates a delivery record for an existing order in the Sales Service.
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Delivery"
+      responses:
+        "200":
+          description: Delivery record created successfully
+        "400":
+          description: Missing delivery configuration fields
+        "401":
+          description: Missing or invalid API key
+        "404":
+          description: Associated order not found
